@@ -1,11 +1,12 @@
 {
     "name": "@grimen/react-modifiable",
     "version": "0.1.0",
-    "description": "",
+    "description": "A clean and performant React Hook implementation of universal component/element dragging, dropping, and resizing.",
     "keywords": [
         "react",
-        "dom",
         "javascript",
+        "dom",
+        "browser",
         "modifiable",
         "interactable",
         "draggable",
