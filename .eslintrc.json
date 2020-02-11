@@ -1,0 +1,28 @@
+{
+    "parser": "babel-eslint",
+    "plugins": [
+        "react",
+        "react-hooks"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "env": {
+        "es6": true,
+        "browser": true,
+        "jest": true
+    },
+    "globals": {
+        "debug": true
+    },
+    "rules": {
+        "no-unused-vars": 1,
+        "no-console": 0,
+        "radix": 0,
+        "no-mixed-operators": 0,
+        "jsx-a11y/alt-text": 0,
+        "jsx-a11y/scope": 0,
+        "react/prop-types": 0
+    }
+}

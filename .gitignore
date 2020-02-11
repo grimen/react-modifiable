@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+*.pem
+node_modules
+dist
+tmp
+.vscode
+*credentials*
+coverage

@@ -1,0 +1,68 @@
+{
+    "name": "@grimen/react-modifiable",
+    "version": "0.1.0",
+    "description": "",
+    "keywords": [
+        "react",
+        "dom",
+        "javascript",
+        "modifiable",
+        "interactable",
+        "draggable",
+        "droppable",
+        "resizable"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/grimen/react-modifiable.git"
+    },
+    "bugs": {
+        "url": "https://github.com/grimen/react-modifiable/issues"
+    },
+    "homepage": "https://github.com/grimen/react-modifiable#readme",
+    "author": "Jonas Grimfelt <jonas@markable.ai> (https://github.com/grimen)",
+    "license": "MIT",
+    "main": "index.js",
+    "module": "index.js",
+    "scripts": {
+        "test": "npx jest",
+        "test-ci": "npx jest --runInBand --forceExit --detectOpenHandles --coverage",
+        "test-dev": "npx jest --watch",
+        "build": "rollup -c",
+        "build-dev": "rollup -c -w",
+        "validate": "npx eslint \"**/*.js\"",
+        "release": "yarn publish --access public",
+        "coverage": "npx jest --coverage",
+        "coverage-codecov": "npx codecov"
+    },
+    "dependencies": {},
+    "peerDependencies": {
+        "classnames": "^2.2.6",
+        "debug": "^4.1.1",
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.8.4",
+        "@babel/preset-env": "^7.8.4",
+        "@babel/preset-react": "^7.8.3",
+        "@rollup/plugin-commonjs": "^11.0.2",
+        "@rollup/plugin-node-resolve": "^7.1.1",
+        "babel-eslint": "^10.0.1",
+        "codecov": "^3.2.0",
+        "eslint": "^6.8.0",
+        "eslint-plugin-react": "^7.18.3",
+        "eslint-plugin-react-hooks": "^2.3.0",
+        "jest": "^25.1.0",
+        "jest-tobetype": "^1.2.3",
+        "rollup-plugin-babel": "^4.3.3",
+        "rollup-plugin-eslint": "^7.0.0"
+    },
+    "jest": {
+        "bail": true,
+        "verbose": true,
+        "testRegex": "test_.*\\.js",
+        "testEnvironment": "node"
+    }
+}
