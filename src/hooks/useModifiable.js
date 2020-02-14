@@ -14,6 +14,7 @@ import {
 
     getConstrainedPositionAndSize,
 
+    getElement,
     getParentElement,
 
     getPointerEvent,
@@ -44,6 +45,8 @@ const useModifiable = ($node, props = {}) => {
     let {
         log,
         id,
+
+        container,
 
         attributePrefix,
 
@@ -178,11 +181,11 @@ const useModifiable = ($node, props = {}) => {
                 `[${modifiableAttributePrefix}-resizable]`,
             ])
 
-            const containerElement = getParentElement(element, [
+            const containerElement = getElement(container) || getParentElement(element, [
                 `[${modifiableAttributePrefix}-container]`,
             ]) || getParentElement(element)
 
-            log('modifiable:mousemove:element', element, actionElement)
+            // log('modifiable:mousedown:element', element, actionElement)
 
             if (!element) {
                 return
@@ -221,6 +224,8 @@ const useModifiable = ($node, props = {}) => {
 
                     document.body.setAttribute(`${modifiableAttributePrefix}-resizing`, modifiableID)
 
+                    resizableElement.setAttribute(`${modifiableAttributePrefix}-resizing`, '')
+
                     setModifiableType('resize')
                     setModifiableElement(resizableElement)
                     setModifiableHandleElement(resizableHandleElement)
@@ -240,7 +245,7 @@ const useModifiable = ($node, props = {}) => {
                 const draggableHandleElement = (
                     getParentElement(target, `[${modifiableAttributePrefix}-draggable-handle]`, {includeSelf: true}) ||
                     getParentElement(target, `[${modifiableAttributePrefix}-resizable]`, {includeSelf: true})
-                )
+                ) || draggableElement
                 const draggableHandleData = draggableHandleElement && draggableHandleElement.dataset && {}
 
                 isDragAction = Boolean(draggableElement && draggableHandleElement)
@@ -250,6 +255,7 @@ const useModifiable = ($node, props = {}) => {
 
                     document.body.setAttribute(`${modifiableAttributePrefix}-dragging`, modifiableID)
 
+                    draggableElement.setAttribute(`${modifiableAttributePrefix}-dragging`, '')
                     draggableElement.$modifiableData = modifiableData
 
                     setModifiableType('drag')
@@ -297,8 +303,6 @@ const useModifiable = ($node, props = {}) => {
             let isResizing = false
             let isDragging = false
             let isDropping = false
-
-            // log('modifiable:mousemove:element', element)
 
             if (droppable) {
                 const dragElementID = document.body.getAttribute(`${modifiableAttributePrefix}-dragging`)
@@ -373,9 +377,11 @@ const useModifiable = ($node, props = {}) => {
 
             const element = modifiableElement
 
-            const containerElement = getParentElement(element, [
+            const containerElement = getElement(container) || getParentElement(element, [
                 `[${modifiableAttributePrefix}-container]`,
             ]) || getParentElement(element)
+
+            // log('modifiable:mousemove:element', element)
 
             if (!element) {
                 return
@@ -397,12 +403,6 @@ const useModifiable = ($node, props = {}) => {
             const dx = x - position.x
             const dy = y - position.y
 
-            const w = pointStart.elementWidth + dx
-            const h = pointStart.elementHeight + dy
-
-            const dw = w - size.width
-            const dh = h - size.height
-
             if (resizable) {
                 isResizing = Boolean(modifiableType === 'resize')
 
@@ -421,6 +421,12 @@ const useModifiable = ($node, props = {}) => {
                     const isModifierSizeY = direction.includes('s')
 
                     log('modifiable:direction', modifiableHandleData)
+
+                    const w = pointStart.elementWidth + dx
+                    const h = pointStart.elementHeight + dy
+
+                    const dw = w - size.width
+                    const dh = h - size.height
 
                     if (isModifierPositionX) {
                         _position.x += dx
@@ -502,7 +508,7 @@ const useModifiable = ($node, props = {}) => {
 
             event = getPointerEvent(event)
 
-            log('modifiable:mouseup')
+            // log('modifiable:mouseup')
 
             setGlobalPointerDown(false)
 
@@ -518,10 +524,12 @@ const useModifiable = ($node, props = {}) => {
                 const dragElementID = document.body.getAttribute(`${modifiableAttributePrefix}-dragging`)
                 const dropElementID = document.body.getAttribute(`${modifiableAttributePrefix}-dropping`)
 
+                // console.warn('modifiable:xxx', {dragElementID, dropElementID})
+
                 const dragElement = dragElementID && document.querySelector(`[${modifiableAttributePrefix}-id="${dragElementID}"]`)
                 const dropElement = dropElementID && document.querySelector(`[${modifiableAttributePrefix}-id="${dropElementID}"]`)
 
-                document.body.removeAttribute(`${modifiableAttributePrefix}-dropping`)
+                // document.body.removeAttribute(`${modifiableAttributePrefix}-dropping`)
 
                 const droppedElements = document.querySelectorAll(`[${modifiableAttributePrefix}-dropping-accept]`)
 
@@ -533,16 +541,21 @@ const useModifiable = ($node, props = {}) => {
 
                 isDropping = Boolean(dragElement && dropElement)
 
-                log('modifiable:droppable:drop?', isDropping, dragElementID)
+                log('modifiable:droppable?', isDropping, dragElementID, '=>', dropElementID)
+
+                let accept = false
+                let data = null
 
                 if (isDropping) {
-                    const result = modifiableDroppableAccept({
+                    data = modifiableDroppableAccept({
                         source: dragElement,
                         target: dropElement,
                     })
 
-                    const accept = !!result
-                    const data = getObject(result, {})
+                    accept = !!data
+                    data = getObject(data, {})
+
+                    log('modifiable:droppable:drop:accept?', accept, data, dragElementID, '=>', dropElementID)
 
                     if (accept) {
                         log('modifiable:droppable:drop', accept, data)
@@ -552,14 +565,14 @@ const useModifiable = ($node, props = {}) => {
                             data,
                         })
                     }
-
-                    log('modifiable:droppable:drop:stop', accept, data)
-
-                    callback(onDropStop)({
-                        accept,
-                        data,
-                    })
                 }
+
+                log('modifiable:droppable:drop:stop', accept, data)
+
+                callback(onDropStop)({
+                    accept,
+                    data,
+                })
 
                 const droppableElements = document.querySelectorAll([
                     `[${modifiableAttributePrefix}-droppable-accept]`,
@@ -604,7 +617,7 @@ const useModifiable = ($node, props = {}) => {
 
             const element = modifiableElement
 
-            const containerElement = getParentElement(element, [
+            const containerElement = getElement(container) || getParentElement(element, [
                 `[${modifiableAttributePrefix}-container]`,
             ]) || getParentElement(element)
 
@@ -615,17 +628,20 @@ const useModifiable = ($node, props = {}) => {
             setModifiableHandleElement(null)
             setModifiableHandleData(null)
 
-            document.body.removeAttribute(`${modifiableAttributePrefix}-dragging`)
-            document.body.removeAttribute(`${modifiableAttributePrefix}-resizing`)
-            document.body.removeAttribute(`${modifiableAttributePrefix}-dropping`)
+            // NOTE: ensure executed in next event loop, to avoid race condition between modifiable element event handlers
+            setTimeout(() => {
+                document.body.removeAttribute(`${modifiableAttributePrefix}-dragging`)
+                document.body.removeAttribute(`${modifiableAttributePrefix}-dropping`)
+                document.body.removeAttribute(`${modifiableAttributePrefix}-resizing`)
 
-            if (modifiableElement) {
-                modifiableElement.removeAttribute(`${modifiableAttributePrefix}-dragging`)
-                modifiableElement.removeAttribute(`${modifiableAttributePrefix}-resizing`)
-                modifiableElement.removeAttribute(`${modifiableAttributePrefix}-dropping`)
+                if (modifiableElement) {
+                    modifiableElement.removeAttribute(`${modifiableAttributePrefix}-dragging`)
+                    modifiableElement.removeAttribute(`${modifiableAttributePrefix}-dropping`)
+                    modifiableElement.removeAttribute(`${modifiableAttributePrefix}-resizing`)
 
-                modifiableElement.removeAttribute(`${modifiableAttributePrefix}-droppable-accept`)
-            }
+                    modifiableElement.removeAttribute(`${modifiableAttributePrefix}-droppable-accept`)
+                }
+            }, 0)
 
             if (!element) {
                 return

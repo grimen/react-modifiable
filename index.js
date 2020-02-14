@@ -692,6 +692,7 @@ var useModifiable = function useModifiable($node) {
         if (isResizeAction) {
           log('modifiable:resizable:start', modifiableID);
           document.body.setAttribute("".concat(modifiableAttributePrefix, "-resizing"), modifiableID);
+          resizableElement.setAttribute("".concat(modifiableAttributePrefix, "-resizing"), '');
           setModifiableType('resize');
           setModifiableElement(resizableElement);
           setModifiableHandleElement(resizableHandleElement);
@@ -712,13 +713,14 @@ var useModifiable = function useModifiable($node) {
           includeSelf: true
         }) || getParentElement(target, "[".concat(modifiableAttributePrefix, "-resizable]"), {
           includeSelf: true
-        });
+        }) || draggableElement;
         var draggableHandleData = draggableHandleElement && draggableHandleElement.dataset && {};
         isDragAction = Boolean(draggableElement && draggableHandleElement);
 
         if (isDragAction) {
           log('modifiable:draggable:start', modifiableID);
           document.body.setAttribute("".concat(modifiableAttributePrefix, "-dragging"), modifiableID);
+          draggableElement.setAttribute("".concat(modifiableAttributePrefix, "-dragging"), '');
           draggableElement.$modifiableData = modifiableData;
           setModifiableType('drag');
           setModifiableElement(draggableElement);
@@ -756,7 +758,7 @@ var useModifiable = function useModifiable($node) {
 
       var isResizing = false;
       var isDragging = false;
-      var isDropping = false; // log('modifiable:mousemove:element', element)
+      var isDropping = false;
 
       if (droppable) {
         var dragElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dragging")); // const dropElementID = document.body.getAttribute(`${modifiableAttributePrefix}-dropping`)
@@ -832,10 +834,6 @@ var useModifiable = function useModifiable($node) {
       var y = pointStart.elementY - pointStart.containerY + (currentPoint.eventY - currentPoint.containerY - (pointStart.eventY - pointStart.containerY));
       var dx = x - position.x;
       var dy = y - position.y;
-      var w = pointStart.elementWidth + dx;
-      var h = pointStart.elementHeight + dy;
-      var dw = w - size.width;
-      var dh = h - size.height;
 
       if (resizable) {
         isResizing = Boolean(modifiableType === 'resize');
@@ -853,6 +851,10 @@ var useModifiable = function useModifiable($node) {
           var isModifierSizeX = direction.includes('e');
           var isModifierSizeY = direction.includes('s');
           log('modifiable:direction', modifiableHandleData);
+          var w = pointStart.elementWidth + dx;
+          var h = pointStart.elementHeight + dy;
+          var dw = w - size.width;
+          var dh = h - size.height;
 
           if (isModifierPositionX) {
             _position.x += dx;
@@ -872,12 +874,12 @@ var useModifiable = function useModifiable($node) {
             _size.height += dh;
           }
 
-          var container = {
+          var _container = {
             width: currentPoint.containerWidth,
             height: currentPoint.containerHeight
           };
 
-          var _getConstrainedPositi = getConstrainedPositionAndSize(_position, _size, container),
+          var _getConstrainedPositi = getConstrainedPositionAndSize(_position, _size, _container),
               _getConstrainedPositi2 = _slicedToArray(_getConstrainedPositi, 2),
               constraintedPosition = _getConstrainedPositi2[0],
               constrainedSize = _getConstrainedPositi2[1];
@@ -906,12 +908,12 @@ var useModifiable = function useModifiable($node) {
 
           _position2.x += dx;
           _position2.y += dy;
-          var _container = {
+          var _container2 = {
             width: currentPoint.containerWidth,
             height: currentPoint.containerHeight
           };
 
-          var _getConstrainedPositi3 = getConstrainedPositionAndSize(_position2, _size2, _container),
+          var _getConstrainedPositi3 = getConstrainedPositionAndSize(_position2, _size2, _container2),
               _getConstrainedPositi4 = _slicedToArray(_getConstrainedPositi3, 2),
               _constraintedPosition = _getConstrainedPositi4[0],
               _constrainedSize = _getConstrainedPositi4[1];
@@ -931,8 +933,8 @@ var useModifiable = function useModifiable($node) {
 
     var _onMouseUp = function _onMouseUp(event) {
       var originalEvent = event;
-      event = getPointerEvent(event);
-      log('modifiable:mouseup');
+      event = getPointerEvent(event); // log('modifiable:mouseup')
+
       setGlobalPointerDown(false);
       var _event3 = event,
           target = _event3.target;
@@ -945,10 +947,11 @@ var useModifiable = function useModifiable($node) {
 
       if (droppable) {
         var dragElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-        var dropElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dropping"));
+        var dropElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dropping")); // console.warn('modifiable:xxx', {dragElementID, dropElementID})
+
         var dragElement = dragElementID && document.querySelector("[".concat(modifiableAttributePrefix, "-id=\"").concat(dragElementID, "\"]"));
-        var dropElement = dropElementID && document.querySelector("[".concat(modifiableAttributePrefix, "-id=\"").concat(dropElementID, "\"]"));
-        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
+        var dropElement = dropElementID && document.querySelector("[".concat(modifiableAttributePrefix, "-id=\"").concat(dropElementID, "\"]")); // document.body.removeAttribute(`${modifiableAttributePrefix}-dropping`)
+
         var droppedElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-dropping-accept]"));
 
         if (droppedElements) {
@@ -959,16 +962,18 @@ var useModifiable = function useModifiable($node) {
         }
 
         isDropping = Boolean(dragElement && dropElement);
-        log('modifiable:droppable:drop?', isDropping, dragElementID);
+        log('modifiable:droppable?', isDropping, dragElementID, '=>', dropElementID);
+        var accept = false;
+        var _data2 = null;
 
         if (isDropping) {
-          var result = modifiableDroppableAccept({
+          _data2 = modifiableDroppableAccept({
             source: dragElement,
             target: dropElement
           });
-          var accept = !!result;
-
-          var _data2 = getObject(result, {});
+          accept = !!_data2;
+          _data2 = getObject(_data2, {});
+          log('modifiable:droppable:drop:accept?', accept, _data2, dragElementID, '=>', dropElementID);
 
           if (accept) {
             log('modifiable:droppable:drop', accept, _data2);
@@ -977,14 +982,13 @@ var useModifiable = function useModifiable($node) {
               data: _data2
             });
           }
-
-          log('modifiable:droppable:drop:stop', accept, _data2);
-          callback(onDropStop)({
-            accept: accept,
-            data: _data2
-          });
         }
 
+        log('modifiable:droppable:drop:stop', accept, _data2);
+        callback(onDropStop)({
+          accept: accept,
+          data: _data2
+        });
         var droppableElements = document.querySelectorAll(["[".concat(modifiableAttributePrefix, "-droppable-accept]"), "[".concat(modifiableAttributePrefix, "-dropping-accept]")].join(', '));
 
         if (droppableElements) {
@@ -1024,22 +1028,25 @@ var useModifiable = function useModifiable($node) {
       }
 
       var element = modifiableElement;
-      var containerElement = getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mouseup:element', element)
+      var containerElement = getElement(container) || getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mouseup:element', element)
 
       setModifiableType(null);
       setModifiableElement(null);
       setModifiableHandleElement(null);
-      setModifiableHandleData(null);
-      document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-      document.body.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
-      document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
+      setModifiableHandleData(null); // NOTE: ensure executed in next event loop, to avoid race condition between modifiable element event handlers
 
-      if (modifiableElement) {
-        modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-        modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
-        modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
-        modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-droppable-accept"));
-      }
+      setTimeout(function () {
+        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
+        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
+        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
+
+        if (modifiableElement) {
+          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
+          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
+          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
+          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-droppable-accept"));
+        }
+      }, 0);
 
       if (!element) {
         return;
