@@ -507,6 +507,7 @@ var useModifiable = function useModifiable($node) {
   var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var log = props.log,
       id = props.id,
+      container = props.container,
       attributePrefix = props.attributePrefix,
       draggable = props.draggable,
       resizable = props.resizable,
@@ -657,8 +658,7 @@ var useModifiable = function useModifiable($node) {
       var element = getParentElement(actionElement, ["[".concat(modifiableAttributePrefix, "-draggable]"), "[".concat(modifiableAttributePrefix, "-resizable]")], {
         includeSelf: true
       }) || getPointerEventElement(target, ["[".concat(modifiableAttributePrefix, "-draggable]"), "[".concat(modifiableAttributePrefix, "-resizable]")]);
-      var containerElement = getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element);
-      log('modifiable:mousemove:element', element, actionElement);
+      var containerElement = getElement(container) || getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mousedown:element', element, actionElement)
 
       if (!element) {
         return;
@@ -815,7 +815,7 @@ var useModifiable = function useModifiable($node) {
       }
 
       var element = modifiableElement;
-      var containerElement = getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element);
+      var containerElement = getElement(container) || getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mousemove:element', element)
 
       if (!element) {
         return;
