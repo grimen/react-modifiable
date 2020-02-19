@@ -12,7 +12,7 @@ import classnames from 'classnames'
       LOGGER
 -------------------------------------- */
 
-// const log = debug('react-modifiable:components:ResizeHandles')
+// const log = debug('react-interactable:components:ResizeHandles')
 
 
 /* =========================================
@@ -21,16 +21,16 @@ import classnames from 'classnames'
 
 const ResizeHandles = (props = {}) => {
     let {
-        modifiableAttributePrefix,
-        modifiableHandleData,
+        interactableAttributePrefix,
+        interactableHandleData,
     } = props
 
-    const currentHandleData = modifiableHandleData || {}
+    const currentHandleData = interactableHandleData || {}
 
     const currentResizeType = currentHandleData.type
     const currentResizeDirection = currentHandleData.direction
 
-    const ModifiableResizeHandle = useCallback((props) => {
+    const InteractableResizeHandle = useCallback((props) => {
         const {
             className,
 
@@ -42,19 +42,19 @@ const ResizeHandles = (props = {}) => {
 
         return (
             <div
-                className={classnames('ModifiableResizeHandle', className, type, direction, {active})}
+                className={classnames('InteractableResizeHandle', className, type, direction, {active})}
 
                 {
                    ...{
-                        [`${modifiableAttributePrefix}-resizable-handle`]: '',
-                        [`${modifiableAttributePrefix}-resizable-handle-type`]: type,
-                        [`${modifiableAttributePrefix}-resizable-handle-direction`]: direction,
+                        [`${interactableAttributePrefix}-resizable-handle`]: '',
+                        [`${interactableAttributePrefix}-resizable-handle-type`]: type,
+                        [`${interactableAttributePrefix}-resizable-handle-direction`]: direction,
                     }
                 }
             />
         )
     }, [
-        modifiableAttributePrefix,
+        interactableAttributePrefix,
     ])
 
     const edgeDirections = ['w', 'n', 'e', 's']
@@ -62,19 +62,19 @@ const ResizeHandles = (props = {}) => {
 
     return (
         <div
-            className={classnames('ModifiableResizeHandles')}
+            className={classnames('InteractableResizeHandles')}
 
             data-current-type={currentResizeType}
             data-current-direction={currentResizeDirection}
         >
-            <div className={classnames('ModifiableResizeHandles-edges')}>
+            <div className={classnames('InteractableResizeHandles-edges')}>
                 {
                     edgeDirections.map((direction) => {
                         const active = Boolean(currentResizeDirection === direction)
 
                         return (
-                            <ModifiableResizeHandle
-                                key={`ModifiableResizeHandle-edge-${direction}`}
+                            <InteractableResizeHandle
+                                key={`InteractableResizeHandle-edge-${direction}`}
                                 type={`edge`}
                                 direction={direction}
                                 active={active}
@@ -84,14 +84,14 @@ const ResizeHandles = (props = {}) => {
                 }
             </div>
 
-            <div className={classnames('ModifiableResizeHandles-corners')}>
+            <div className={classnames('InteractableResizeHandles-corners')}>
                 {
                     cornerDirections.map((direction) => {
                         const active = Boolean(currentResizeDirection === direction)
 
                         return (
-                            <ModifiableResizeHandle
-                                key={`ModifiableResizeHandle-corner-${direction}`}
+                            <InteractableResizeHandle
+                                key={`InteractableResizeHandle-corner-${direction}`}
                                 type={`corner`}
                                 direction={direction}
                                 active={active}

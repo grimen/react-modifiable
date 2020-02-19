@@ -17,7 +17,7 @@ import {
       LOGGER
 -------------------------------------- */
 
-// const log = debug('react-modifiable:components:Inspector')
+// const log = debug('react-interactable:components:Inspector')
 
 
 /* =========================================
@@ -56,7 +56,7 @@ const Inspector = (props = {}) => {
     const _point = point || {}
     const _pointEnd = pointEnd || {}
 
-    const ModifiableInspectorDeltaPointer = (props) => {
+    const InteractableInspectorDeltaPointer = (props) => {
         let {
             name,
             point,
@@ -74,11 +74,11 @@ const Inspector = (props = {}) => {
         const elementTransform = (_pointStart.elementX && _pointStart.elementY) && `translate(${point.elementX}px, ${point.elementY}px)`
 
         return (
-            <div className={classnames('ModifiableInspector-start')}>
+            <div className={classnames('InteractableInspector-start')}>
                 {
                     eventTransform && ReactDOM.createPortal((
                         <span
-                            className={classnames(`ModifiableInspector-start-event`)}
+                            className={classnames(`InteractableInspector-start-event`)}
                             style={{
                                 background: eventColor,
                                 ...style,
@@ -94,7 +94,7 @@ const Inspector = (props = {}) => {
                 {
                     elementTransform && ReactDOM.createPortal((
                         <span
-                            className={classnames(`ModifiableInspector-start-element`)}
+                            className={classnames(`InteractableInspector-start-element`)}
                             style={{
                                 background: elementColor,
                                 ...style,
@@ -111,10 +111,10 @@ const Inspector = (props = {}) => {
     }
 
     return (
-        <div className={classnames('ModifiableInspector')}>
+        <div className={classnames('InteractableInspector')}>
             {
                 enabled && (
-                    <ModifiableInspectorDeltaPointer
+                    <InteractableInspectorDeltaPointer
                         name={`start`}
 
                         point={_pointStart}
@@ -129,7 +129,7 @@ const Inspector = (props = {}) => {
 
             {
                 enabled && (
-                    <ModifiableInspectorDeltaPointer
+                    <InteractableInspectorDeltaPointer
                         name={`move`}
 
                         point={_point}
@@ -144,7 +144,7 @@ const Inspector = (props = {}) => {
 
             {
                 enabled && (
-                    <ModifiableInspectorDeltaPointer
+                    <InteractableInspectorDeltaPointer
                         name={`end`}
 
                         point={_pointEnd}

@@ -19,6 +19,42 @@ function _typeof(obj) {
   return _typeof(obj);
 }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -497,13 +533,13 @@ function callback(fn) {
       LOGGER
 -------------------------------------- */
 
-var _log = debug('react-modifiable:hooks:useModifiable');
+var _log = debug('react-interactable:hooks:useInteractable');
 /* =========================================
       HOOKS
 -------------------------------------- */
 
 
-var useModifiable = function useModifiable($node) {
+var useInteractable = function useInteractable($node) {
   var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var log = props.log,
       id = props.id,
@@ -521,25 +557,44 @@ var useModifiable = function useModifiable($node) {
       onResizeStart = props.onResizeStart,
       onResize = props.onResize,
       onResizeStop = props.onResizeStop,
-      onDrop = props.onDrop,
       onDropStart = props.onDropStart,
+      onDrop = props.onDrop,
       onDropStop = props.onDropStop;
-  var modifiableAttributePrefix = attributePrefix || 'data-modifiable';
-  var modifiableData = data;
-  var modifiableIDGenerator = getFunction(id, function (node) {
-    useModifiable.instanceID = useModifiable.instanceID || 1;
-    return id || node && node.getAttribute("".concat(modifiableAttributePrefix, "-id")) || useModifiable.instanceID++;
+  var interactableAttributePrefix = attributePrefix || 'data-interactable';
+  var interactableData = data;
+  var interactableIDGenerator = getFunction(id, function (node) {
+    useInteractable.instanceID = useInteractable.instanceID || 1;
+    return id || node && node.getAttribute("".concat(interactableAttributePrefix, "-id")) || useInteractable.instanceID++;
   });
-  var modifiableDroppableAccept = getFunction(droppable, function (_ref) {
-    var source = _ref.source,
-        target = _ref.target;
-    return {
-      source: source,
-      target: target
+  var interactableDroppableAccept = getFunction(droppable,
+  /*#__PURE__*/
+  function () {
+    var _ref = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee(_ref2) {
+      var source, target, data;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              source = _ref2.source, target = _ref2.target;
+              data = source && (source.$interactableData || source.$data || _objectSpread2({}, source.dataset)) || null;
+              return _context.abrupt("return", data);
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
     };
-  });
+  }());
   var node = $node.current;
-  var modifiableID = modifiableIDGenerator(node, props);
+  var interactableID = interactableIDGenerator(node, props);
 
   if (log === undefined) {
     log = function log() {
@@ -547,11 +602,11 @@ var useModifiable = function useModifiable($node) {
         args[_key] = arguments[_key];
       }
 
-      return _log.apply(void 0, ["".concat(modifiableID)].concat(args));
+      return _log.apply(void 0, ["".concat(interactableID)].concat(args));
     };
   }
 
-  var modifiableRAF = useRef(null);
+  var interactableRAF = useRef(null);
 
   var _useState = useState(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -584,37 +639,37 @@ var useModifiable = function useModifiable($node) {
 
   var _useState9 = useState(null),
       _useState10 = _slicedToArray(_useState9, 2),
-      modifiableType = _useState10[0],
-      setModifiableType = _useState10[1];
+      interactableType = _useState10[0],
+      setInteractableType = _useState10[1];
 
   var _useState11 = useState(null),
       _useState12 = _slicedToArray(_useState11, 2),
-      modifiableElement = _useState12[0],
-      setModifiableElement = _useState12[1];
+      interactableElement = _useState12[0],
+      setInteractableElement = _useState12[1];
 
   var _useState13 = useState(null),
       _useState14 = _slicedToArray(_useState13, 2),
-      modifiableHandleElement = _useState14[0],
-      setModifiableHandleElement = _useState14[1];
+      interactableHandleElement = _useState14[0],
+      setInteractableHandleElement = _useState14[1];
 
   var _useState15 = useState({}),
       _useState16 = _slicedToArray(_useState15, 2),
-      modifiableHandleData = _useState16[0],
-      setModifiableHandleData = _useState16[1];
+      interactableHandleData = _useState16[0],
+      setInteractableHandleData = _useState16[1];
 
   var _useState17 = useState({}),
       _useState18 = _slicedToArray(_useState17, 2),
-      modifiablePosition = _useState18[0],
-      setModifiablePosition = _useState18[1];
+      interactablePosition = _useState18[0],
+      setInteractablePosition = _useState18[1];
 
   var _useState19 = useState({}),
       _useState20 = _slicedToArray(_useState19, 2),
-      modifiableSize = _useState20[0],
-      setModifiableSize = _useState20[1];
+      interactableSize = _useState20[0],
+      setInteractableSize = _useState20[1];
 
-  var dragging = Boolean(modifiableType === 'drag');
-  var dropping = Boolean(modifiableType === 'drop');
-  var resizing = Boolean(modifiableType === 'resize'); // NOTE: not reliable for drag positions
+  var dragging = Boolean(interactableType === 'drag');
+  var dropping = Boolean(interactableType === 'drop');
+  var resizing = Boolean(interactableType === 'resize'); // NOTE: not reliable for drag positions
 
   var _native = false;
   useEffect(function () {
@@ -624,496 +679,666 @@ var useModifiable = function useModifiable($node) {
       return;
     }
 
-    node.setAttribute("".concat(modifiableAttributePrefix, "-id"), modifiableID);
+    node.setAttribute("".concat(interactableAttributePrefix, "-id"), interactableID);
 
     if (draggable) {
-      node.setAttribute("".concat(modifiableAttributePrefix, "-draggable"), '');
+      node.setAttribute("".concat(interactableAttributePrefix, "-draggable"), '');
     }
 
     if (droppable) {
-      node.setAttribute("".concat(modifiableAttributePrefix, "-droppable"), '');
+      node.setAttribute("".concat(interactableAttributePrefix, "-droppable"), '');
     }
 
     if (resizable) {
-      node.setAttribute("".concat(modifiableAttributePrefix, "-resizable"), '');
+      node.setAttribute("".concat(interactableAttributePrefix, "-resizable"), '');
     }
 
-    var _onMouseDown = function _onMouseDown(event) {
-      var originalEvent = event;
-      event = getPointerEvent(event); // log('modifiable:mousedown', event)
+    var _onMouseDown =
+    /*#__PURE__*/
+    function () {
+      var _ref3 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(event) {
+        var originalEvent, _event, target, actionElement, element, containerElement, isCurrentElement, currentPointStart, isResizeAction, isDragAction, resizableElement, resizableHandleElement, resizableHandleData, draggableElement, draggableHandleElement, draggableHandleData;
 
-      setGlobalPointerDown(true);
-      var _event = event,
-          target = _event.target;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                originalEvent = event;
+                event = getPointerEvent(event); // log('interactable:mousedown', event)
 
-      if (target.matches("[".concat(modifiableAttributePrefix, "-ignore], [").concat(modifiableAttributePrefix, "-ignore] *"))) {
-        return;
-      }
+                setGlobalPointerDown(true);
+                _event = event, target = _event.target;
 
-      var actionElement = getParentElement(target, ["[".concat(modifiableAttributePrefix, "-draggable-handle]"), "[".concat(modifiableAttributePrefix, "-resizable-handle]")], {
-        includeSelf: true
-      }) || getParentElement(target, ["[".concat(modifiableAttributePrefix, "-draggable]"), "[".concat(modifiableAttributePrefix, "-resizable]")], {
-        includeSelf: true
-      });
-      var element = getParentElement(actionElement, ["[".concat(modifiableAttributePrefix, "-draggable]"), "[".concat(modifiableAttributePrefix, "-resizable]")], {
-        includeSelf: true
-      }) || getPointerEventElement(target, ["[".concat(modifiableAttributePrefix, "-draggable]"), "[".concat(modifiableAttributePrefix, "-resizable]")]);
-      var containerElement = getElement(container) || getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mousedown:element', element, actionElement)
+                if (!target.matches("[".concat(interactableAttributePrefix, "-ignore], [").concat(interactableAttributePrefix, "-ignore] *"))) {
+                  _context2.next = 6;
+                  break;
+                }
 
-      if (!element) {
-        return;
-      }
+                return _context2.abrupt("return");
 
-      var isCurrentElement = Boolean(actionElement && actionElement.matches(["[".concat(modifiableAttributePrefix, "-id=\"").concat(modifiableID, "\"]"), "[".concat(modifiableAttributePrefix, "-id=\"").concat(modifiableID, "\"] *")].join(', ')));
+              case 6:
+                actionElement = getParentElement(target, ["[".concat(interactableAttributePrefix, "-draggable-handle]"), "[".concat(interactableAttributePrefix, "-resizable-handle]")], {
+                  includeSelf: true
+                }) || getParentElement(target, ["[".concat(interactableAttributePrefix, "-draggable]"), "[".concat(interactableAttributePrefix, "-resizable]")], {
+                  includeSelf: true
+                });
+                element = getParentElement(actionElement, ["[".concat(interactableAttributePrefix, "-draggable]"), "[".concat(interactableAttributePrefix, "-resizable]")], {
+                  includeSelf: true
+                }) || getPointerEventElement(target, ["[".concat(interactableAttributePrefix, "-draggable]"), "[".concat(interactableAttributePrefix, "-resizable]")]);
+                containerElement = getElement(container) || getParentElement(element, ["[".concat(interactableAttributePrefix, "-container]")]) || getParentElement(element); // log('interactable:mousedown:element', element, actionElement)
 
-      if (!isCurrentElement) {
-        return;
-      }
+                if (element) {
+                  _context2.next = 11;
+                  break;
+                }
 
-      originalEvent.preventDefault();
-      var currentPointStart = getPointerEventsPointDetails(event, element, containerElement);
-      setPointStart(currentPointStart);
-      var isResizeAction = false;
-      var isDragAction = false;
+                return _context2.abrupt("return");
 
-      if (resizable) {
-        var resizableElement = getParentElement(target, "[".concat(modifiableAttributePrefix, "-resizable]"), {
-          includeSelf: true
-        });
-        var resizableHandleElement = getParentElement(target, "[".concat(modifiableAttributePrefix, "-resizable-handle]"), {
-          includeSelf: true
-        });
-        var resizableHandleData = resizableHandleElement && resizableHandleElement.dataset && {
-          type: resizableHandleElement.dataset.modifiableResizableHandleType,
-          direction: resizableHandleElement.dataset.modifiableResizableHandleDirection
-        };
-        isResizeAction = Boolean(resizableElement && resizableHandleElement);
+              case 11:
+                isCurrentElement = Boolean(actionElement && actionElement.matches(["[".concat(interactableAttributePrefix, "-id=\"").concat(interactableID, "\"]"), "[".concat(interactableAttributePrefix, "-id=\"").concat(interactableID, "\"] *")].join(', ')));
 
-        if (isResizeAction) {
-          log('modifiable:resizable:start', modifiableID);
-          document.body.setAttribute("".concat(modifiableAttributePrefix, "-resizing"), modifiableID);
-          resizableElement.setAttribute("".concat(modifiableAttributePrefix, "-resizing"), '');
-          setModifiableType('resize');
-          setModifiableElement(resizableElement);
-          setModifiableHandleElement(resizableHandleElement);
-          setModifiableHandleData(resizableHandleData);
-          onResizeStart({
-            position: position,
-            size: size,
-            pointStart: currentPointStart
-          });
-        }
-      }
+                if (isCurrentElement) {
+                  _context2.next = 14;
+                  break;
+                }
 
-      if (draggable && !isResizeAction) {
-        var draggableElement = getParentElement(target, "[".concat(modifiableAttributePrefix, "-draggable]"), {
-          includeSelf: true
-        });
-        var draggableHandleElement = getParentElement(target, "[".concat(modifiableAttributePrefix, "-draggable-handle]"), {
-          includeSelf: true
-        }) || getParentElement(target, "[".concat(modifiableAttributePrefix, "-resizable]"), {
-          includeSelf: true
-        }) || draggableElement;
-        var draggableHandleData = draggableHandleElement && draggableHandleElement.dataset && {};
-        isDragAction = Boolean(draggableElement && draggableHandleElement);
+                return _context2.abrupt("return");
 
-        if (isDragAction) {
-          log('modifiable:draggable:start', modifiableID);
-          document.body.setAttribute("".concat(modifiableAttributePrefix, "-dragging"), modifiableID);
-          draggableElement.setAttribute("".concat(modifiableAttributePrefix, "-dragging"), '');
-          draggableElement.$modifiableData = modifiableData;
-          setModifiableType('drag');
-          setModifiableElement(draggableElement);
-          setModifiableHandleElement(draggableHandleElement);
-          setModifiableHandleData(draggableHandleData);
-          onDragStart({
-            position: position,
-            size: size,
-            pointStart: pointStart
-          });
-        }
-      }
-    };
+              case 14:
+                originalEvent.preventDefault();
+                currentPointStart = getPointerEventsPointDetails(event, element, containerElement);
+                setPointStart(currentPointStart);
+                isResizeAction = false;
+                isDragAction = false;
 
-    var _onMouseMove = function _onMouseMove(event) {
-      var originalEvent = event;
-      event = getPointerEvent(event);
-      var _event2 = event,
-          target = _event2.target;
+                if (resizable) {
+                  resizableElement = getParentElement(target, "[".concat(interactableAttributePrefix, "-resizable]"), {
+                    includeSelf: true
+                  });
+                  resizableHandleElement = getParentElement(target, "[".concat(interactableAttributePrefix, "-resizable-handle]"), {
+                    includeSelf: true
+                  });
+                  resizableHandleData = resizableHandleElement && resizableHandleElement.dataset && {
+                    type: resizableHandleElement.dataset.interactableResizableHandleType,
+                    direction: resizableHandleElement.dataset.interactableResizableHandleDirection
+                  };
+                  isResizeAction = Boolean(resizableElement && resizableHandleElement);
 
-      if (target.matches("[".concat(modifiableAttributePrefix, "-ignore], [").concat(modifiableAttributePrefix, "-ignore] *"))) {
-        return;
-      } // log('modifiable:mousemove', event)
+                  if (isResizeAction) {
+                    log('interactable:resizable:start', interactableID);
+                    document.body.setAttribute("".concat(interactableAttributePrefix, "-resizing"), interactableID);
+                    resizableElement.setAttribute("".concat(interactableAttributePrefix, "-resizing"), '');
+                    setInteractableType('resize');
+                    setInteractableElement(resizableElement);
+                    setInteractableHandleElement(resizableHandleElement);
+                    setInteractableHandleData(resizableHandleData);
+                    onResizeStart({
+                      position: position,
+                      size: size,
+                      pointStart: currentPointStart
+                    });
+                  }
+                }
 
+                if (draggable && !isResizeAction) {
+                  draggableElement = getParentElement(target, "[".concat(interactableAttributePrefix, "-draggable]"), {
+                    includeSelf: true
+                  });
+                  draggableHandleElement = getParentElement(target, "[".concat(interactableAttributePrefix, "-draggable-handle]"), {
+                    includeSelf: true
+                  }) || getParentElement(target, "[".concat(interactableAttributePrefix, "-resizable]"), {
+                    includeSelf: true
+                  }) || draggableElement;
+                  draggableHandleData = draggableHandleElement && draggableHandleElement.dataset && {};
+                  isDragAction = Boolean(draggableElement && draggableHandleElement);
 
-      if (!globalPointerDown) {
-        return;
-      }
+                  if (isDragAction) {
+                    log('interactable:draggable:start', interactableID);
+                    document.body.setAttribute("".concat(interactableAttributePrefix, "-dragging"), interactableID);
+                    draggableElement.setAttribute("".concat(interactableAttributePrefix, "-dragging"), '');
+                    draggableElement.$interactableData = interactableData;
+                    setInteractableType('drag');
+                    setInteractableElement(draggableElement);
+                    setInteractableHandleElement(draggableHandleElement);
+                    setInteractableHandleData(draggableHandleData);
+                    onDragStart({
+                      position: position,
+                      size: size,
+                      pointStart: pointStart
+                    });
+                  }
+                }
 
-      var isPointerStillDown = isPointerEventButton(event); // NOTE: sometimes `mouseup` event is not triggered
-
-      if (!isPointerStillDown) {
-        return _onMouseUp(event);
-      }
-
-      var isResizing = false;
-      var isDragging = false;
-      var isDropping = false;
-
-      if (droppable) {
-        var dragElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dragging")); // const dropElementID = document.body.getAttribute(`${modifiableAttributePrefix}-dropping`)
-
-        var dragElement = dragElementID && document.querySelector("[".concat(modifiableAttributePrefix, "-id=\"").concat(dragElementID, "\"]")) || null;
-        var dragContainerElement = dragElement && (getParentElement(dragElement, ["".concat(modifiableAttributePrefix, "-container")]) || getParentElement(dragElement)) || null;
-        var droppableElements = dragContainerElement && dragContainerElement.querySelectorAll("[".concat(modifiableAttributePrefix, "-droppable]:not([").concat(modifiableAttributePrefix, "-id=\"").concat(dragElementID, "\"])")) || [];
-        var dropElement = getPointerEventElement(event, "[".concat(modifiableAttributePrefix, "-droppable]:not([").concat(modifiableAttributePrefix, "-id=\"").concat(dragElementID, "\"])"));
-        isDropping = Boolean(dragElement && dropElement); // log('modifiable:droppable:drop?', isDropping, dragElementID, '=>', dropElementID)
-
-        for (var _i = 0, _arr = _toConsumableArray(droppableElements); _i < _arr.length; _i++) {
-          var _droppableElement = _arr[_i];
-
-          // NOTE: `result` can be `<Object>` (success) or `<Error>` (failed accepting - with details)
-          var _result = modifiableDroppableAccept({
-            source: dragElement,
-            target: _droppableElement
-          });
-
-          var _accept = !!_result;
-
-          _droppableElement.setAttribute("".concat(modifiableAttributePrefix, "-droppable-accept"), _accept);
-        }
-
-        var _droppableElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-droppable-accept], [").concat(modifiableAttributePrefix, "-dropping-accept]"));
-
-        if (_droppableElements) {
-          for (var _i2 = 0, _arr2 = _toConsumableArray(_droppableElements); _i2 < _arr2.length; _i2++) {
-            var droppableElement = _arr2[_i2];
-            droppableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
-            droppableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping-accept"));
+              case 22:
+              case "end":
+                return _context2.stop();
+            }
           }
-        }
+        }, _callee2);
+      }));
 
-        if (isDropping) {
-          var result = modifiableDroppableAccept({
-            source: dragElement,
-            target: dropElement
-          });
-          var accept = !!result;
+      return function _onMouseDown(_x2) {
+        return _ref3.apply(this, arguments);
+      };
+    }();
 
-          var _data = getObject(result, {});
+    var _onMouseMove =
+    /*#__PURE__*/
+    function () {
+      var _ref4 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3(event) {
+        var originalEvent, _event2, target, isPointerStillDown, isResizing, isDragging, isDropping, dragElementID, dropElementID, dragElement, dragContainerElement, droppableElements, dropElement, _i, _arr, _droppableElement, _source, _target2, _result, _accept, _droppableElements, _i2, _arr2, droppableElement, source, _target, result, accept, _data, element, containerElement, currentPoint, x, y, dx, dy, _position, _size, direction, isModifierPositionX, isModifierPositionY, isModifierSizeX, isModifierSizeY, w, h, dw, dh, _container, _getConstrainedPositi, _getConstrainedPositi2, constraintedPosition, constrainedSize, resized, _position2, _size2, _container2, _getConstrainedPositi3, _getConstrainedPositi4, _constraintedPosition, _constrainedSize, dragged;
 
-          document.body.setAttribute("".concat(modifiableAttributePrefix, "-dropping"), modifiableID);
-          document.body.setAttribute("".concat(modifiableAttributePrefix, "-dropping-accept"), accept);
-          dragContainerElement.setAttribute("".concat(modifiableAttributePrefix, "-dropping"), modifiableID);
-          dragContainerElement.setAttribute("".concat(modifiableAttributePrefix, "-dropping-accept"), accept);
-          dropElement.setAttribute("".concat(modifiableAttributePrefix, "-dropping"), '');
-          dropElement.setAttribute("".concat(modifiableAttributePrefix, "-dropping-accept"), accept);
-          log('modifiable:droppable:drop:start', accept, _data);
-          callback(onDropStart)({
-            accept: accept,
-            data: _data
-          });
-        }
-      }
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                originalEvent = event;
+                event = getPointerEvent(event);
+                _event2 = event, target = _event2.target;
 
-      var element = modifiableElement;
-      var containerElement = getElement(container) || getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mousemove:element', element)
+                if (!target.matches("[".concat(interactableAttributePrefix, "-ignore], [").concat(interactableAttributePrefix, "-ignore] *"))) {
+                  _context3.next = 5;
+                  break;
+                }
 
-      if (!element) {
-        return;
-      }
+                return _context3.abrupt("return");
 
-      if (!containerElement) {
-        return;
-      }
+              case 5:
+                if (globalPointerDown) {
+                  _context3.next = 7;
+                  break;
+                }
 
-      originalEvent.preventDefault();
-      var currentPoint = getPointerEventsPointDetails(event, element, containerElement);
-      setPoint(currentPoint);
-      var x = pointStart.elementX - pointStart.containerX + (currentPoint.eventX - currentPoint.containerX - (pointStart.eventX - pointStart.containerX));
-      var y = pointStart.elementY - pointStart.containerY + (currentPoint.eventY - currentPoint.containerY - (pointStart.eventY - pointStart.containerY));
-      var dx = x - position.x;
-      var dy = y - position.y;
+                return _context3.abrupt("return");
 
-      if (resizable) {
-        isResizing = Boolean(modifiableType === 'resize');
+              case 7:
+                isPointerStillDown = isPointerEventButton(event); // NOTE: sometimes `mouseup` event is not triggered
 
-        if (isResizing) {
-          log('modifiable:resizable:drag', x, y);
+                if (isPointerStillDown) {
+                  _context3.next = 10;
+                  break;
+                }
 
-          var _position = getValidPosition(position);
+                return _context3.abrupt("return", _onMouseUp(event));
 
-          var _size = getValidSize(size);
+              case 10:
+                isResizing = false;
+                isDragging = false;
+                isDropping = false;
 
-          var direction = "".concat(modifiableHandleData.direction || '');
-          var isModifierPositionX = direction.includes('w');
-          var isModifierPositionY = direction.includes('n');
-          var isModifierSizeX = direction.includes('e');
-          var isModifierSizeY = direction.includes('s');
-          log('modifiable:direction', modifiableHandleData);
-          var w = pointStart.elementWidth + dx;
-          var h = pointStart.elementHeight + dy;
-          var dw = w - size.width;
-          var dh = h - size.height;
+                if (!droppable) {
+                  _context3.next = 66;
+                  break;
+                }
 
-          if (isModifierPositionX) {
-            _position.x += dx;
-            _size.width += -dx;
+                dragElementID = document.body.getAttribute("".concat(interactableAttributePrefix, "-dragging"));
+                dropElementID = interactableID;
+                dragElement = dragElementID && document.querySelector("[".concat(interactableAttributePrefix, "-id=\"").concat(dragElementID, "\"]")) || null;
+                dragContainerElement = dragElement && (getParentElement(dragElement, ["".concat(interactableAttributePrefix, "-container")]) || getParentElement(dragElement)) || null;
+                droppableElements = dragContainerElement && dragContainerElement.querySelectorAll("[".concat(interactableAttributePrefix, "-droppable]:not([").concat(interactableAttributePrefix, "-id=\"").concat(dragElementID, "\"])")) || [];
+                dropElement = getPointerEventElement(event, "[".concat(interactableAttributePrefix, "-id=\"").concat(dropElementID, "\"]"));
+                isDropping = Boolean(dragElement && dropElement);
+                log('interactable:droppable:drop?', isDropping, dragElementID, '=>', dropElementID);
+                _i = 0, _arr = _toConsumableArray(droppableElements);
+
+              case 23:
+                if (!(_i < _arr.length)) {
+                  _context3.next = 42;
+                  break;
+                }
+
+                _droppableElement = _arr[_i];
+                _source = dragElement;
+                _target2 = _droppableElement;
+                _result = void 0; // NOTE: `result` can be `<Object>` (success) or `<Error>` (failed accepting - with details)
+
+                _context3.prev = 28;
+                _context3.next = 31;
+                return interactableDroppableAccept({
+                  source: _source,
+                  target: _target2
+                });
+
+              case 31:
+                _result = _context3.sent;
+                _context3.next = 37;
+                break;
+
+              case 34:
+                _context3.prev = 34;
+                _context3.t0 = _context3["catch"](28);
+                _result = _context3.t0;
+
+              case 37:
+                _accept = !!_result && !(_result instanceof Error);
+
+                _droppableElement.setAttribute("".concat(interactableAttributePrefix, "-droppable-accept"), _accept);
+
+              case 39:
+                _i++;
+                _context3.next = 23;
+                break;
+
+              case 42:
+                _droppableElements = document.querySelectorAll("[".concat(interactableAttributePrefix, "-droppable-accept], [").concat(interactableAttributePrefix, "-dropping-accept]"));
+
+                if (_droppableElements) {
+                  for (_i2 = 0, _arr2 = _toConsumableArray(_droppableElements); _i2 < _arr2.length; _i2++) {
+                    droppableElement = _arr2[_i2];
+                    droppableElement.removeAttribute("".concat(interactableAttributePrefix, "-dropping"));
+                    droppableElement.removeAttribute("".concat(interactableAttributePrefix, "-dropping-accept"));
+                  }
+                }
+
+                if (!isDropping) {
+                  _context3.next = 66;
+                  break;
+                }
+
+                source = dragElement;
+                _target = dropElement;
+                _context3.prev = 47;
+                _context3.next = 50;
+                return interactableDroppableAccept({
+                  source: source,
+                  target: _target
+                });
+
+              case 50:
+                result = _context3.sent;
+                _context3.next = 56;
+                break;
+
+              case 53:
+                _context3.prev = 53;
+                _context3.t1 = _context3["catch"](47);
+                result = _context3.t1;
+
+              case 56:
+                accept = !!result && !(result instanceof Error);
+                _data = getObject(result, {});
+                document.body.setAttribute("".concat(interactableAttributePrefix, "-dropping"), dropElementID);
+                document.body.setAttribute("".concat(interactableAttributePrefix, "-dropping-accept"), accept);
+                dragContainerElement.setAttribute("".concat(interactableAttributePrefix, "-dropping"), dropElementID);
+                dragContainerElement.setAttribute("".concat(interactableAttributePrefix, "-dropping-accept"), accept);
+                dropElement.setAttribute("".concat(interactableAttributePrefix, "-dropping"), '');
+                dropElement.setAttribute("".concat(interactableAttributePrefix, "-dropping-accept"), accept);
+                log('interactable:droppable:drop:start', accept, _data);
+                callback(onDropStart)({
+                  source: source,
+                  target: _target,
+                  accept: accept,
+                  data: _data
+                });
+
+              case 66:
+                element = interactableElement;
+                containerElement = getElement(container) || getParentElement(element, ["[".concat(interactableAttributePrefix, "-container]")]) || getParentElement(element); // log('interactable:mousemove:element', element)
+
+                if (element) {
+                  _context3.next = 70;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 70:
+                if (containerElement) {
+                  _context3.next = 72;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 72:
+                originalEvent.preventDefault();
+                currentPoint = getPointerEventsPointDetails(event, element, containerElement);
+                setPoint(currentPoint);
+                x = pointStart.elementX - pointStart.containerX + (currentPoint.eventX - currentPoint.containerX - (pointStart.eventX - pointStart.containerX));
+                y = pointStart.elementY - pointStart.containerY + (currentPoint.eventY - currentPoint.containerY - (pointStart.eventY - pointStart.containerY));
+                dx = x - position.x;
+                dy = y - position.y;
+
+                if (resizable) {
+                  isResizing = Boolean(interactableType === 'resize');
+
+                  if (isResizing) {
+                    log('interactable:resizable:drag', x, y);
+                    _position = getValidPosition(position);
+                    _size = getValidSize(size);
+                    direction = "".concat(interactableHandleData.direction || '');
+                    isModifierPositionX = direction.includes('w');
+                    isModifierPositionY = direction.includes('n');
+                    isModifierSizeX = direction.includes('e');
+                    isModifierSizeY = direction.includes('s');
+                    log('interactable:direction', interactableHandleData);
+                    w = pointStart.elementWidth + dx;
+                    h = pointStart.elementHeight + dy;
+                    dw = w - size.width;
+                    dh = h - size.height;
+
+                    if (isModifierPositionX) {
+                      _position.x += dx;
+                      _size.width += -dx;
+                    }
+
+                    if (isModifierPositionY) {
+                      _position.y += dy;
+                      _size.height += -dy;
+                    }
+
+                    if (isModifierSizeX) {
+                      _size.width += dw;
+                    }
+
+                    if (isModifierSizeY) {
+                      _size.height += dh;
+                    }
+
+                    _container = {
+                      width: currentPoint.containerWidth,
+                      height: currentPoint.containerHeight
+                    };
+                    _getConstrainedPositi = getConstrainedPositionAndSize(_position, _size, _container), _getConstrainedPositi2 = _slicedToArray(_getConstrainedPositi, 2), constraintedPosition = _getConstrainedPositi2[0], constrainedSize = _getConstrainedPositi2[1];
+                    resized = !!(dx + dy + dw + dh);
+                    interactableRAF.current = withRAF(function () {
+                      callback(onResize)({
+                        position: constraintedPosition,
+                        size: constrainedSize,
+                        resized: resized,
+                        point: currentPoint
+                      });
+                    }, interactableRAF.current)();
+                  }
+                }
+
+                if (draggable) {
+                  isDragging = Boolean(interactableType === 'drag');
+
+                  if (isDragging && !isResizing) {
+                    log('interactable:draggable:drag', x, y);
+                    _position2 = getValidPosition(position);
+                    _size2 = getValidSize(size);
+                    _position2.x += dx;
+                    _position2.y += dy;
+                    _container2 = {
+                      width: currentPoint.containerWidth,
+                      height: currentPoint.containerHeight
+                    };
+                    _getConstrainedPositi3 = getConstrainedPositionAndSize(_position2, _size2, _container2), _getConstrainedPositi4 = _slicedToArray(_getConstrainedPositi3, 2), _constraintedPosition = _getConstrainedPositi4[0], _constrainedSize = _getConstrainedPositi4[1];
+                    dragged = !!(dx + dy);
+                    interactableRAF.current = withRAF(function () {
+                      onDrag({
+                        position: _constraintedPosition,
+                        size: _constrainedSize,
+                        dragged: dragged,
+                        point: currentPoint
+                      });
+                    }, interactableRAF.current)();
+                  }
+                }
+
+              case 81:
+              case "end":
+                return _context3.stop();
+            }
           }
+        }, _callee3, null, [[28, 34], [47, 53]]);
+      }));
 
-          if (isModifierPositionY) {
-            _position.y += dy;
-            _size.height += -dy;
+      return function _onMouseMove(_x3) {
+        return _ref4.apply(this, arguments);
+      };
+    }();
+
+    var _onMouseUp =
+    /*#__PURE__*/
+    function () {
+      var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4(event) {
+        var originalEvent, _event3, target, isDropping, dragElementID, dropElementID, dragElement, dropElement, droppedElements, _i3, _arr3, droppedElement, isCurrentDroppable, accept, _data2, source, _target3, result, droppableElements, _i4, _arr4, droppableElement, resizableElements, _i5, _arr5, resizableElement, draggableElements, _i6, _arr6, draggableElement, element, containerElement, currentPointEnd, isResizing, _resizableElements, _i7, _arr7, _resizableElement, isDragging, _draggableElements, _i8, _arr8, _draggableElement;
+
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                originalEvent = event;
+                event = getPointerEvent(event); // log('interactable:mouseup')
+
+                setGlobalPointerDown(false);
+                _event3 = event, target = _event3.target;
+
+                if (!target.matches("[".concat(interactableAttributePrefix, "-ignore], [").concat(interactableAttributePrefix, "-ignore] *"))) {
+                  _context4.next = 6;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 6:
+                isDropping = false;
+
+                if (!droppable) {
+                  _context4.next = 39;
+                  break;
+                }
+
+                dragElementID = document.body.getAttribute("".concat(interactableAttributePrefix, "-dragging"));
+                dropElementID = document.body.getAttribute("".concat(interactableAttributePrefix, "-dropping"));
+                dragElement = dragElementID && document.querySelector("[".concat(interactableAttributePrefix, "-id=\"").concat(dragElementID, "\"]"));
+                dropElement = dropElementID && document.querySelector("[".concat(interactableAttributePrefix, "-id=\"").concat(dropElementID, "\"]"));
+                droppedElements = document.querySelectorAll("[".concat(interactableAttributePrefix, "-dropping-accept]"));
+
+                if (droppedElements) {
+                  for (_i3 = 0, _arr3 = _toConsumableArray(droppedElements); _i3 < _arr3.length; _i3++) {
+                    droppedElement = _arr3[_i3];
+                    droppedElement.removeAttribute("".concat(interactableAttributePrefix, "-dropping-accept"));
+                  }
+                }
+
+                isCurrentDroppable = Boolean(interactableID === dropElementID);
+                isDropping = Boolean(dragElement && dropElement && isCurrentDroppable);
+                log('interactable:droppable?', isDropping, dragElementID, '=>', dropElementID);
+                accept = false;
+                _data2 = null;
+                source = dragElement;
+                _target3 = dropElement;
+
+                if (!isDropping) {
+                  _context4.next = 35;
+                  break;
+                }
+
+                _context4.prev = 22;
+                _context4.next = 25;
+                return interactableDroppableAccept({
+                  source: source,
+                  target: _target3
+                });
+
+              case 25:
+                result = _context4.sent;
+                _context4.next = 31;
+                break;
+
+              case 28:
+                _context4.prev = 28;
+                _context4.t0 = _context4["catch"](22);
+                result = _context4.t0;
+
+              case 31:
+                accept = !!result && !(result instanceof Error);
+                _data2 = getObject(result, {});
+                log('interactable:droppable:drop:accept?', accept, _data2, dragElementID, '=>', dropElementID);
+
+                if (accept) {
+                  log('interactable:droppable:drop', accept, _data2);
+                  callback(onDrop)({
+                    source: source,
+                    target: _target3,
+                    accept: accept,
+                    data: _data2
+                  });
+                }
+
+              case 35:
+                log('interactable:droppable:drop:stop', accept, _data2);
+                callback(onDropStop)({
+                  source: source,
+                  target: _target3,
+                  accept: accept,
+                  data: _data2
+                });
+                droppableElements = document.querySelectorAll(["[".concat(interactableAttributePrefix, "-droppable-accept]"), "[".concat(interactableAttributePrefix, "-dropping-accept]")].join(', '));
+
+                if (droppableElements) {
+                  for (_i4 = 0, _arr4 = _toConsumableArray(droppableElements); _i4 < _arr4.length; _i4++) {
+                    droppableElement = _arr4[_i4];
+                    droppableElement.removeAttribute("".concat(interactableAttributePrefix, "-dropping"));
+                    droppableElement.removeAttribute("".concat(interactableAttributePrefix, "-dropping-accept"));
+                    droppableElement.removeAttribute("".concat(interactableAttributePrefix, "-droppable-accept"));
+                  }
+                }
+
+              case 39:
+                if (resizable) {
+                  resizableElements = document.querySelectorAll("[".concat(interactableAttributePrefix, "-resizable]"));
+
+                  if (resizableElements) {
+                    for (_i5 = 0, _arr5 = _toConsumableArray(resizableElements); _i5 < _arr5.length; _i5++) {
+                      resizableElement = _arr5[_i5];
+                      resizableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizing"));
+                      resizableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizing-accept"));
+                      resizableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizable-accept"));
+                    }
+                  }
+                }
+
+                if (draggable) {
+                  draggableElements = document.querySelectorAll("[".concat(interactableAttributePrefix, "-draggable]"));
+
+                  if (draggableElements) {
+                    for (_i6 = 0, _arr6 = _toConsumableArray(draggableElements); _i6 < _arr6.length; _i6++) {
+                      draggableElement = _arr6[_i6];
+                      draggableElement.removeAttribute("".concat(interactableAttributePrefix, "-dragging"));
+                      draggableElement.removeAttribute("".concat(interactableAttributePrefix, "-dragging-accept"));
+                      draggableElement.removeAttribute("".concat(interactableAttributePrefix, "-draggable-accept"));
+                    }
+                  }
+                }
+
+                element = interactableElement;
+                containerElement = getElement(container) || getParentElement(element, ["[".concat(interactableAttributePrefix, "-container]")]) || getParentElement(element); // log('interactable:mouseup:element', element)
+
+                setInteractableType(null);
+                setInteractableElement(null);
+                setInteractableHandleElement(null);
+                setInteractableHandleData(null); // NOTE: ensure executed in next event loop, to avoid race condition between interactable element event handlers
+
+                setTimeout(function () {
+                  document.body.removeAttribute("".concat(interactableAttributePrefix, "-dragging"));
+                  document.body.removeAttribute("".concat(interactableAttributePrefix, "-dropping"));
+                  document.body.removeAttribute("".concat(interactableAttributePrefix, "-resizing"));
+
+                  if (interactableElement) {
+                    interactableElement.removeAttribute("".concat(interactableAttributePrefix, "-dragging"));
+                    interactableElement.removeAttribute("".concat(interactableAttributePrefix, "-dropping"));
+                    interactableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizing"));
+                    interactableElement.removeAttribute("".concat(interactableAttributePrefix, "-droppable-accept"));
+                  }
+                }, 0);
+
+                if (element) {
+                  _context4.next = 50;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 50:
+                if (!(element !== node)) {
+                  _context4.next = 52;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 52:
+                originalEvent.preventDefault();
+                currentPointEnd = getPointerEventsPointDetails(event, element, containerElement);
+                setPointEnd(currentPointEnd);
+
+                if (resizable) {
+                  isResizing = Boolean(interactableType === 'resize');
+
+                  if (isResizing) {
+                    log('interactable:resizable:end');
+                    onResizeStop({
+                      position: position,
+                      size: size,
+                      pointEnd: currentPointEnd
+                    });
+                  }
+
+                  _resizableElements = document.querySelectorAll("[".concat(interactableAttributePrefix, "-resizable]"));
+
+                  if (_resizableElements) {
+                    for (_i7 = 0, _arr7 = _toConsumableArray(_resizableElements); _i7 < _arr7.length; _i7++) {
+                      _resizableElement = _arr7[_i7];
+
+                      _resizableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizable-accept"));
+
+                      _resizableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizing"));
+
+                      _resizableElement.removeAttribute("".concat(interactableAttributePrefix, "-resizing-accept"));
+                    }
+                  }
+                }
+
+                if (draggable) {
+                  isDragging = Boolean(interactableType === 'drag');
+
+                  if (isDragging) {
+                    log('interactable:draggable:end');
+                    onDragStop({
+                      position: position,
+                      size: size,
+                      pointEnd: currentPointEnd
+                    });
+                  }
+
+                  _draggableElements = document.querySelectorAll("[".concat(interactableAttributePrefix, "-draggable]"));
+
+                  if (_draggableElements) {
+                    for (_i8 = 0, _arr8 = _toConsumableArray(_draggableElements); _i8 < _arr8.length; _i8++) {
+                      _draggableElement = _arr8[_i8];
+
+                      _draggableElement.removeAttribute("".concat(interactableAttributePrefix, "-draggable-accept"));
+
+                      _draggableElement.removeAttribute("".concat(interactableAttributePrefix, "-dragging"));
+
+                      _draggableElement.removeAttribute("".concat(interactableAttributePrefix, "-dragging-accept"));
+                    }
+                  }
+                }
+
+              case 57:
+              case "end":
+                return _context4.stop();
+            }
           }
+        }, _callee4, null, [[22, 28]]);
+      }));
 
-          if (isModifierSizeX) {
-            _size.width += dw;
-          }
-
-          if (isModifierSizeY) {
-            _size.height += dh;
-          }
-
-          var _container = {
-            width: currentPoint.containerWidth,
-            height: currentPoint.containerHeight
-          };
-
-          var _getConstrainedPositi = getConstrainedPositionAndSize(_position, _size, _container),
-              _getConstrainedPositi2 = _slicedToArray(_getConstrainedPositi, 2),
-              constraintedPosition = _getConstrainedPositi2[0],
-              constrainedSize = _getConstrainedPositi2[1];
-
-          var resized = !!(dx + dy + dw + dh);
-          modifiableRAF.current = withRAF(function () {
-            callback(onResize)({
-              position: constraintedPosition,
-              size: constrainedSize,
-              resized: resized,
-              point: currentPoint
-            });
-          }, modifiableRAF.current)();
-        }
-      }
-
-      if (draggable) {
-        isDragging = Boolean(modifiableType === 'drag');
-
-        if (isDragging && !isResizing) {
-          log('modifiable:draggable:drag', x, y);
-
-          var _position2 = getValidPosition(position);
-
-          var _size2 = getValidSize(size);
-
-          _position2.x += dx;
-          _position2.y += dy;
-          var _container2 = {
-            width: currentPoint.containerWidth,
-            height: currentPoint.containerHeight
-          };
-
-          var _getConstrainedPositi3 = getConstrainedPositionAndSize(_position2, _size2, _container2),
-              _getConstrainedPositi4 = _slicedToArray(_getConstrainedPositi3, 2),
-              _constraintedPosition = _getConstrainedPositi4[0],
-              _constrainedSize = _getConstrainedPositi4[1];
-
-          var dragged = !!(dx + dy);
-          modifiableRAF.current = withRAF(function () {
-            onDrag({
-              position: _constraintedPosition,
-              size: _constrainedSize,
-              dragged: dragged,
-              point: currentPoint
-            });
-          }, modifiableRAF.current)();
-        }
-      }
-    };
-
-    var _onMouseUp = function _onMouseUp(event) {
-      var originalEvent = event;
-      event = getPointerEvent(event); // log('modifiable:mouseup')
-
-      setGlobalPointerDown(false);
-      var _event3 = event,
-          target = _event3.target;
-
-      if (target.matches("[".concat(modifiableAttributePrefix, "-ignore], [").concat(modifiableAttributePrefix, "-ignore] *"))) {
-        return;
-      }
-
-      var isDropping = false;
-
-      if (droppable) {
-        var dragElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-        var dropElementID = document.body.getAttribute("".concat(modifiableAttributePrefix, "-dropping")); // console.warn('modifiable:xxx', {dragElementID, dropElementID})
-
-        var dragElement = dragElementID && document.querySelector("[".concat(modifiableAttributePrefix, "-id=\"").concat(dragElementID, "\"]"));
-        var dropElement = dropElementID && document.querySelector("[".concat(modifiableAttributePrefix, "-id=\"").concat(dropElementID, "\"]")); // document.body.removeAttribute(`${modifiableAttributePrefix}-dropping`)
-
-        var droppedElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-dropping-accept]"));
-
-        if (droppedElements) {
-          for (var _i3 = 0, _arr3 = _toConsumableArray(droppedElements); _i3 < _arr3.length; _i3++) {
-            var droppedElement = _arr3[_i3];
-            droppedElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping-accept"));
-          }
-        }
-
-        isDropping = Boolean(dragElement && dropElement);
-        log('modifiable:droppable?', isDropping, dragElementID, '=>', dropElementID);
-        var accept = false;
-        var _data2 = null;
-
-        if (isDropping) {
-          _data2 = modifiableDroppableAccept({
-            source: dragElement,
-            target: dropElement
-          });
-          accept = !!_data2;
-          _data2 = getObject(_data2, {});
-          log('modifiable:droppable:drop:accept?', accept, _data2, dragElementID, '=>', dropElementID);
-
-          if (accept) {
-            log('modifiable:droppable:drop', accept, _data2);
-            callback(onDrop)({
-              accept: accept,
-              data: _data2
-            });
-          }
-        }
-
-        log('modifiable:droppable:drop:stop', accept, _data2);
-        callback(onDropStop)({
-          accept: accept,
-          data: _data2
-        });
-        var droppableElements = document.querySelectorAll(["[".concat(modifiableAttributePrefix, "-droppable-accept]"), "[".concat(modifiableAttributePrefix, "-dropping-accept]")].join(', '));
-
-        if (droppableElements) {
-          for (var _i4 = 0, _arr4 = _toConsumableArray(droppableElements); _i4 < _arr4.length; _i4++) {
-            var droppableElement = _arr4[_i4];
-            droppableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
-            droppableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping-accept"));
-            droppableElement.removeAttribute("".concat(modifiableAttributePrefix, "-droppable-accept"));
-          }
-        }
-      }
-
-      if (resizable) {
-        var resizableElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-resizable]"));
-
-        if (resizableElements) {
-          for (var _i5 = 0, _arr5 = _toConsumableArray(resizableElements); _i5 < _arr5.length; _i5++) {
-            var resizableElement = _arr5[_i5];
-            resizableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
-            resizableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing-accept"));
-            resizableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizable-accept"));
-          }
-        }
-      }
-
-      if (draggable) {
-        var draggableElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-draggable]"));
-
-        if (draggableElements) {
-          for (var _i6 = 0, _arr6 = _toConsumableArray(draggableElements); _i6 < _arr6.length; _i6++) {
-            var draggableElement = _arr6[_i6];
-            draggableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-            draggableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging-accept"));
-            draggableElement.removeAttribute("".concat(modifiableAttributePrefix, "-draggable-accept"));
-          }
-        }
-      }
-
-      var element = modifiableElement;
-      var containerElement = getElement(container) || getParentElement(element, ["[".concat(modifiableAttributePrefix, "-container]")]) || getParentElement(element); // log('modifiable:mouseup:element', element)
-
-      setModifiableType(null);
-      setModifiableElement(null);
-      setModifiableHandleElement(null);
-      setModifiableHandleData(null); // NOTE: ensure executed in next event loop, to avoid race condition between modifiable element event handlers
-
-      setTimeout(function () {
-        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
-        document.body.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
-
-        if (modifiableElement) {
-          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dropping"));
-          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
-          modifiableElement.removeAttribute("".concat(modifiableAttributePrefix, "-droppable-accept"));
-        }
-      }, 0);
-
-      if (!element) {
-        return;
-      }
-
-      if (element !== node) {
-        return;
-      }
-
-      originalEvent.preventDefault();
-      var currentPointEnd = getPointerEventsPointDetails(event, element, containerElement);
-      setPointEnd(currentPointEnd);
-
-      if (resizable) {
-        var isResizing = Boolean(modifiableType === 'resize');
-
-        if (isResizing) {
-          log('modifiable:resizable:end');
-          onResizeStop({
-            position: position,
-            size: size,
-            pointEnd: currentPointEnd
-          });
-        }
-
-        var _resizableElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-resizable]"));
-
-        if (_resizableElements) {
-          for (var _i7 = 0, _arr7 = _toConsumableArray(_resizableElements); _i7 < _arr7.length; _i7++) {
-            var _resizableElement = _arr7[_i7];
-
-            _resizableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizable-accept"));
-
-            _resizableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing"));
-
-            _resizableElement.removeAttribute("".concat(modifiableAttributePrefix, "-resizing-accept"));
-          }
-        }
-      }
-
-      if (draggable) {
-        var isDragging = Boolean(modifiableType === 'drag');
-
-        if (isDragging) {
-          log('modifiable:draggable:end');
-          onDragStop({
-            position: position,
-            size: size,
-            pointEnd: currentPointEnd
-          });
-        }
-
-        var _draggableElements = document.querySelectorAll("[".concat(modifiableAttributePrefix, "-draggable]"));
-
-        if (_draggableElements) {
-          for (var _i8 = 0, _arr8 = _toConsumableArray(_draggableElements); _i8 < _arr8.length; _i8++) {
-            var _draggableElement = _arr8[_i8];
-
-            _draggableElement.removeAttribute("".concat(modifiableAttributePrefix, "-draggable-accept"));
-
-            _draggableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging"));
-
-            _draggableElement.removeAttribute("".concat(modifiableAttributePrefix, "-dragging-accept"));
-          }
-        }
-      }
-    };
+      return function _onMouseUp(_x4) {
+        return _ref5.apply(this, arguments);
+      };
+    }();
 
     document.addEventListener('mousedown', _onMouseDown, false);
     document.addEventListener('mousemove', _onMouseMove, false);
@@ -1130,7 +1355,7 @@ var useModifiable = function useModifiable($node) {
       document.removeEventListener('touchend', _onMouseUp);
       document.removeEventListener('touchcancel', _onMouseUp);
     };
-  }, [$node, _native, modifiableID, modifiableData, modifiableDroppableAccept, draggable, resizable, droppable, position, size, globalPointerDown, setGlobalPointerDown, modifiableAttributePrefix, modifiableType, modifiableElement, modifiableHandleElement, modifiableHandleData, modifiablePosition, modifiableSize, setModifiableType, setModifiableElement, setModifiableHandleElement, setModifiableHandleData, setModifiablePosition, setModifiableSize, pointStart, point, pointEnd, setPointStart, setPoint, setPointEnd, modifiableRAF, onDrag, onDragStart, onDragStop, onResize, onResizeStart, onResizeStop, onDrop, onDropStart, onDropStop]);
+  }, [$node, _native, interactableID, interactableData, interactableDroppableAccept, draggable, resizable, droppable, position, size, globalPointerDown, setGlobalPointerDown, interactableAttributePrefix, interactableType, interactableElement, interactableHandleElement, interactableHandleData, interactablePosition, interactableSize, setInteractableType, setInteractableElement, setInteractableHandleElement, setInteractableHandleData, setInteractablePosition, setInteractableSize, pointStart, point, pointEnd, setPointStart, setPoint, setPointEnd, interactableRAF, onDrag, onDragStart, onDragStop, onResize, onResizeStart, onResizeStop, onDrop, onDropStart, onDropStop]);
   return {
     $node: $node,
     draggable: draggable,
@@ -1142,22 +1367,22 @@ var useModifiable = function useModifiable($node) {
     resizing: resizing,
     globalPointerDown: globalPointerDown,
     setGlobalPointerDown: setGlobalPointerDown,
-    modifiableAttributePrefix: modifiableAttributePrefix,
-    modifiableType: modifiableType,
-    modifiableElement: modifiableElement,
-    modifiableHandleElement: modifiableHandleElement,
-    modifiableHandleData: modifiableHandleData,
-    setModifiableType: setModifiableType,
-    setModifiableElement: setModifiableElement,
-    setModifiableHandleElement: setModifiableHandleElement,
-    setModifiableHandleData: setModifiableHandleData,
+    interactableAttributePrefix: interactableAttributePrefix,
+    interactableType: interactableType,
+    interactableElement: interactableElement,
+    interactableHandleElement: interactableHandleElement,
+    interactableHandleData: interactableHandleData,
+    setInteractableType: setInteractableType,
+    setInteractableElement: setInteractableElement,
+    setInteractableHandleElement: setInteractableHandleElement,
+    setInteractableHandleData: setInteractableHandleData,
     pointStart: pointStart,
     point: point,
     pointEnd: pointEnd,
     setPointStart: setPointStart,
     setPoint: setPoint,
     setPointEnd: setPointEnd,
-    modifiableRAF: modifiableRAF,
+    interactableRAF: interactableRAF,
     onDrag: onDrag,
     onDragStart: onDragStart,
     onDragStop: onDragStop,
@@ -1170,7 +1395,7 @@ var useModifiable = function useModifiable($node) {
 /* =========================================
       LOGGER
 -------------------------------------- */
-// const log = debug('react-modifiable:components:Inspector')
+// const log = debug('react-interactable:components:Inspector')
 
 /* =========================================
       COMPONENTS
@@ -1204,7 +1429,7 @@ var Inspector = function Inspector() {
 
   var _pointEnd = pointEnd || {};
 
-  var ModifiableInspectorDeltaPointer = function ModifiableInspectorDeltaPointer(props) {
+  var InteractableInspectorDeltaPointer = function InteractableInspectorDeltaPointer(props) {
     var name = props.name,
         point = props.point,
         eventColor = props.eventColor,
@@ -1216,16 +1441,16 @@ var Inspector = function Inspector() {
     var eventTransform = _pointStart.eventX && _pointStart.eventY && "translate(".concat(point.eventX, "px, ").concat(point.eventY, "px)");
     var elementTransform = _pointStart.elementX && _pointStart.elementY && "translate(".concat(point.elementX, "px, ").concat(point.elementY, "px)");
     return React.createElement("div", {
-      className: classnames('ModifiableInspector-start')
+      className: classnames('InteractableInspector-start')
     }, eventTransform && ReactDOM.createPortal(React.createElement("span", {
-      className: classnames("ModifiableInspector-start-event"),
+      className: classnames("InteractableInspector-start-event"),
       style: _objectSpread2({
         background: eventColor
       }, style, {
         transform: eventTransform
       })
     }, "event:".concat(name)), document.body), elementTransform && ReactDOM.createPortal(React.createElement("span", {
-      className: classnames("ModifiableInspector-start-element"),
+      className: classnames("InteractableInspector-start-element"),
       style: _objectSpread2({
         background: elementColor
       }, style, {
@@ -1235,20 +1460,20 @@ var Inspector = function Inspector() {
   };
 
   return React.createElement("div", {
-    className: classnames('ModifiableInspector')
-  }, enabled && React.createElement(ModifiableInspectorDeltaPointer, {
+    className: classnames('InteractableInspector')
+  }, enabled && React.createElement(InteractableInspectorDeltaPointer, {
     name: "start",
     point: _pointStart,
     eventColor: 'brown',
     elementColor: 'magenta',
     style: labelStyle
-  }), enabled && React.createElement(ModifiableInspectorDeltaPointer, {
+  }), enabled && React.createElement(InteractableInspectorDeltaPointer, {
     name: "move",
     point: _point,
     eventColor: 'brown',
     elementColor: 'magenta',
     style: labelStyle
-  }), enabled && React.createElement(ModifiableInspectorDeltaPointer, {
+  }), enabled && React.createElement(InteractableInspectorDeltaPointer, {
     name: "end",
     point: _pointEnd,
     eventColor: 'brown',
@@ -1260,7 +1485,7 @@ var Inspector = function Inspector() {
 /* =========================================
       LOGGER
 -------------------------------------- */
-// const log = debug('react-modifiable:components:ResizeHandles')
+// const log = debug('react-interactable:components:ResizeHandles')
 
 /* =========================================
       COMPONENTS
@@ -1268,12 +1493,12 @@ var Inspector = function Inspector() {
 
 var ResizeHandles = function ResizeHandles() {
   var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var modifiableAttributePrefix = props.modifiableAttributePrefix,
-      modifiableHandleData = props.modifiableHandleData;
-  var currentHandleData = modifiableHandleData || {};
+  var interactableAttributePrefix = props.interactableAttributePrefix,
+      interactableHandleData = props.interactableHandleData;
+  var currentHandleData = interactableHandleData || {};
   var currentResizeType = currentHandleData.type;
   var currentResizeDirection = currentHandleData.direction;
-  var ModifiableResizeHandle = useCallback(function (props) {
+  var InteractableResizeHandle = useCallback(function (props) {
     var _ref;
 
     var className = props.className,
@@ -1281,33 +1506,33 @@ var ResizeHandles = function ResizeHandles() {
         direction = props.direction,
         active = props.active;
     return React.createElement("div", _extends({
-      className: classnames('ModifiableResizeHandle', className, type, direction, {
+      className: classnames('InteractableResizeHandle', className, type, direction, {
         active: active
       })
-    }, (_ref = {}, _defineProperty(_ref, "".concat(modifiableAttributePrefix, "-resizable-handle"), ''), _defineProperty(_ref, "".concat(modifiableAttributePrefix, "-resizable-handle-type"), type), _defineProperty(_ref, "".concat(modifiableAttributePrefix, "-resizable-handle-direction"), direction), _ref)));
-  }, [modifiableAttributePrefix]);
+    }, (_ref = {}, _defineProperty(_ref, "".concat(interactableAttributePrefix, "-resizable-handle"), ''), _defineProperty(_ref, "".concat(interactableAttributePrefix, "-resizable-handle-type"), type), _defineProperty(_ref, "".concat(interactableAttributePrefix, "-resizable-handle-direction"), direction), _ref)));
+  }, [interactableAttributePrefix]);
   var edgeDirections = ['w', 'n', 'e', 's'];
   var cornerDirections = ['nw', 'ne', 'sw', 'se'];
   return React.createElement("div", {
-    className: classnames('ModifiableResizeHandles'),
+    className: classnames('InteractableResizeHandles'),
     "data-current-type": currentResizeType,
     "data-current-direction": currentResizeDirection
   }, React.createElement("div", {
-    className: classnames('ModifiableResizeHandles-edges')
+    className: classnames('InteractableResizeHandles-edges')
   }, edgeDirections.map(function (direction) {
     var active = Boolean(currentResizeDirection === direction);
-    return React.createElement(ModifiableResizeHandle, {
-      key: "ModifiableResizeHandle-edge-".concat(direction),
+    return React.createElement(InteractableResizeHandle, {
+      key: "InteractableResizeHandle-edge-".concat(direction),
       type: "edge",
       direction: direction,
       active: active
     });
   })), React.createElement("div", {
-    className: classnames('ModifiableResizeHandles-corners')
+    className: classnames('InteractableResizeHandles-corners')
   }, cornerDirections.map(function (direction) {
     var active = Boolean(currentResizeDirection === direction);
-    return React.createElement(ModifiableResizeHandle, {
-      key: "ModifiableResizeHandle-corner-".concat(direction),
+    return React.createElement(InteractableResizeHandle, {
+      key: "InteractableResizeHandle-corner-".concat(direction),
       type: "corner",
       direction: direction,
       active: active
@@ -1322,18 +1547,18 @@ var ResizeHandles = function ResizeHandles() {
       EXPORTS
 -------------------------------------- */
 
-var useModifiable$1 = useModifiable;
+var useInteractable$1 = useInteractable;
 var Inspector$1 = Inspector;
-var ModifiableInspector = Inspector;
+var InteractableInspector = Inspector;
 var ResizeHandles$1 = ResizeHandles;
-var ModifiableResizeHandles = ResizeHandles;
+var InteractableResizeHandles = ResizeHandles;
 var index = {
-  useModifiable: useModifiable$1,
+  useInteractable: useInteractable$1,
   Inspector: Inspector$1,
-  ModifiableInspector: ModifiableInspector,
+  InteractableInspector: InteractableInspector,
   ResizeHandles: ResizeHandles$1,
-  ModifiableResizeHandles: ModifiableResizeHandles
+  InteractableResizeHandles: InteractableResizeHandles
 };
 
 export default index;
-export { Inspector$1 as Inspector, ModifiableInspector, ModifiableResizeHandles, ResizeHandles$1 as ResizeHandles, useModifiable$1 as useModifiable };
+export { Inspector$1 as Inspector, InteractableInspector, InteractableResizeHandles, ResizeHandles$1 as ResizeHandles, useInteractable$1 as useInteractable };

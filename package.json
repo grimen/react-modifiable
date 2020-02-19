@@ -1,5 +1,5 @@
 {
-    "name": "@grimen/react-modifiable",
+    "name": "@grimen/react-interactable",
     "version": "0.1.0",
     "description": "A clean and performant React Hook implementation of universal component/element dragging, dropping, and resizing.",
     "keywords": [
@@ -7,7 +7,6 @@
         "javascript",
         "dom",
         "browser",
-        "modifiable",
         "interactable",
         "draggable",
         "droppable",
@@ -15,12 +14,12 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/grimen/react-modifiable.git"
+        "url": "git+https://github.com/grimen/react-interactable.git"
     },
     "bugs": {
-        "url": "https://github.com/grimen/react-modifiable/issues"
+        "url": "https://github.com/grimen/react-interactable/issues"
     },
-    "homepage": "https://github.com/grimen/react-modifiable#readme",
+    "homepage": "https://github.com/grimen/react-interactable#readme",
     "author": "Jonas Grimfelt <jonas@markable.ai> (https://github.com/grimen)",
     "license": "MIT",
     "main": "index.js",
